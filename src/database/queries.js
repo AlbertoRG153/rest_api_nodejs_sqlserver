@@ -28,7 +28,7 @@ export const queries = {
     createBanderaTicket: 'INSERT INTO Bandera_Ticket (solucion) VALUES (@solucion)',
     getBanderaTicketById: 'SELECT * FROM Bandera_Ticket WHERE id = @Id',
     deleteBanderaTicketById: 'DELETE FROM Bandera_Ticket WHERE id = @Id',
-    
+
     // Consultas para Tickets Escalados
     getAllTicketsEscalados: 'SELECT * FROM Tickets_escalados',
     createTicketEscalado: 'INSERT INTO Tickets_escalados (agente_peticion_escalacion, id_nivel_soporte, agente_asignado_escalacion, descripcion) VALUES (@agente_peticion_escalacion, @id_nivel_soporte, @agente_asignado_escalacion, @descripcion)',
@@ -41,32 +41,17 @@ export const queries = {
     getTipoTicketById: 'SELECT * FROM Tipo_tickets WHERE id = @Id',
     deleteTipoTicketById: 'DELETE FROM Tipo_tickets WHERE id = @Id',
     updateTipoTicketFields: 'UPDATE Tipo_tickets SET proridad = @proridad, id_nivel_soporte = @id_nivel_soporte, id_especialidad = @id_especialidad WHERE id = @id',
-    
+
     // Consultas para Documentación
     getAllDocumentaciones: 'SELECT * FROM Documentacion',
     createDocumentacion: 'INSERT INTO Documentacion (id_tipo_ticket, titulo, descripcion, fecha_ultima_modificacion) VALUES (@id_tipo_ticket, @titulo, @descripcion, @fecha_ultima_modificacion)',
     getDocumentacionById: 'SELECT * FROM Documentacion WHERE id = @Id',
     deleteDocumentacionById: 'DELETE FROM Documentacion WHERE id = @Id',
-    
-     // Consultas para Estados de Ticket
-     getAllEstadosTicket: 'SELECT * FROM Estado_Ticket',
-     createEstadoTicket: 'INSERT INTO Estado_Ticket (estado_ticket, color) VALUES (@estado_ticket, @color)',
-     getEstadoTicketById: 'SELECT * FROM Estado_Ticket WHERE id = @Id',
-     deleteEstadoTicketById: 'DELETE FROM Estado_Ticket WHERE id = @Id',
-     
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Consultas para Estados de Ticket
+    getAllEstadosTicket: 'SELECT * FROM Estado_Ticket',
+    createEstadoTicket: 'INSERT INTO Estado_Ticket (estado_ticket, color) VALUES (@estado_ticket, @color)',
+    getEstadoTicketById: 'SELECT * FROM Estado_Ticket WHERE id = @Id',
+    deleteEstadoTicketById: 'DELETE FROM Estado_Ticket WHERE id = @Id',
 
 };

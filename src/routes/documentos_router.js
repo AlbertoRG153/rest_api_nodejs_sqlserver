@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getDocumentaciones, getDocumentacionById, createDocumentacion, createDocumentacion } from './controllers/documentos_controller';
+import { getDocumentaciones, getDocumentacionById, createDocumentacion } from '../controllers/documentos_controller';
 
 
 

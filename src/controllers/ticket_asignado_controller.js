@@ -1,10 +1,9 @@
-import { getConnection, sql } from '../database';
-import { queries } from '../queries'; // Ajusta la importación según tu estructura de archivos
+import { getConnection, sql, queries } from '../database';
 
 export const createTicketAsignado = async (req, res) => {
     try {
         const { id_agente_helpdesk, id_ticket } = req.body;
-        
+
         const pool = await getConnection();
 
         await pool.request()

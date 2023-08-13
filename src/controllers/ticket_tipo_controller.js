@@ -1,10 +1,10 @@
-import { getConnection, sql } from '../database';
-import { queries } from '../queries'; // Ajusta la importación según tu estructura de archivos
+import { getConnection, sql, queries } from '../database';
+// Ajusta la importación según tu estructura de archivos
 
 export const createTipoTicket = async (req, res) => {
     try {
         const { proridad, id_nivel_soporte, id_especialidad } = req.body;
-        
+
         const pool = await getConnection();
 
         await pool.request()

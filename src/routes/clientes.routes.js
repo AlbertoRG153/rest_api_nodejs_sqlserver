@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getClientes, saveClientes, getClienteById, deleteClienteById, getTotalClientes, updateClienteById } from '../controllers/clientes.controller'
+import { getClientes, saveClientes, getClienteById, deleteClienteById, getTotalClientes, updateClienteById } from '../controllers/clientes_controller'
 
 const router = Router()
 

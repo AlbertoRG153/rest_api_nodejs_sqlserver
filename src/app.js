@@ -8,6 +8,7 @@ import ticketBandera from './routes/ticket_bandera_router'
 import ticketEscalados from './routes/ticket_escalados_router'
 import ticketTipo from './routes/ticket_tipo_router'
 import Documentos from './routes/documentos_router'
+import entidadRoutes from './routes/entidad_router'
 
 
 const app = express();
@@ -27,6 +28,6 @@ app.use(ticketBandera);
 app.use(ticketEscalados);
 app.use(ticketTipo);
 app.use(Documentos);
-
+app.use(entidadRoutes)
 
 export default app

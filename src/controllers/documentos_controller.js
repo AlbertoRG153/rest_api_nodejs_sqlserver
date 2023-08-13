@@ -1,10 +1,10 @@
-import { getConnection, sql } from '../database';
-import { queries } from '../queries'; // Ajusta la importación según tu estructura de archivos
+import { getConnection, sql, queries } from '../database';
+// Ajusta la importación según tu estructura de archivos
 
 export const createDocumentacion = async (req, res) => {
     try {
         const { id_tipo_ticket, titulo, descripcion, fecha_ultima_modificacion } = req.body;
-        
+
         const pool = await getConnection();
 
         await pool.request()

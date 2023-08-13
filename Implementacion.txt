@@ -140,12 +140,13 @@ El backend debe:
 
 
 DELETE Ticket
-Se manda del frontend
+Se manda desde el frontend
 {
     "correo",
     "contrasena",
     "id_ticket" 
 }
+
 El backend debe:
     -Verificar que el usuario que esta mandando esto tiene rol de tipo "Admin"
     -Borrar el Ticket si es el caso

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTicketsByAgente, getTicketsEnCursoEmpleado, getTicketsEnCursoAgente,getTicketsFinalizadosEmpleado,getTicketsFinalizadosAgente,getPuntuacionPromedioTickets,createTicket, asignarEstadoComienzoTrabajo, asignarEstadoFinTrabajo,getTicketInfoById,getAgenteByNivelEspecialidad,escalateTicket  } from '../controllers/ticket.controller';
+import { getTicketsByAgente, getTicketsEnCursoEmpleado, getTicketsEnCursoAgente,getTicketsFinalizadosEmpleado,getTicketsFinalizadosAgente,getPuntuacionPromedioTickets,createTicket, asignarEstadoComienzoTrabajo, asignarEstadoFinTrabajo,getTicketInfoById,getAgenteByNivelEspecialidad,deleteTicket } from '../controllers/ticket.controller';
 
 const router = Router();
 
@@ -16,9 +16,10 @@ router.get('/tickets/agente/:nivel_soporte/:id_especialidad', getAgenteByNivelEs
 router.put('/tickets/asignar-comienzo-trabajo/:id', asignarEstadoComienzoTrabajo);
 router.put('/tickets/asignar-fin-trabajo/:id', asignarEstadoFinTrabajo);
 router.post('/tickets/create', createTicket);
+router.delete('/delete-ticket', deleteTicket);
 
 
-router.put('/tickets/escalar/:id', escalateTicket);
+
 
 
 export default router;

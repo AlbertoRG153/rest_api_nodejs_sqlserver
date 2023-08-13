@@ -8,6 +8,72 @@ export const queries =
     getTotalClientes: 'SELECT COUNT(*) FROM Clientes',
     updateClienteById: 'UPDATE Clientes SET nombre=@nombre, telefono=@telefono, correo=@correo, contrasena=@contrasena WHERE Id = @Id',
 
+
+    getAgentesWithEspecialidades: 'SELECT *FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Especialidades ON Agentes_helpdesk.id = Especialidades.id',
+
+    getEmpleadosDetails: 'SELECT *FROM Entidades INNER JOIN Empleados ON Entidades.id = Empleados.id INNER JOIN Cargos ON  Empleados.id = Cargos.id INNER JOIN Roles on Empleados.id = Roles.id INNER JOIN Sucursales on Empleados.id = Sucursales.id',
+    
+    getAgentesWithEspecialidadesById : 'SELECT *FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Especialidades ON Agentes_helpdesk.id_especialidad = Especialidades.id WHERE Entidades.id = @id;',
+
+    getEmpleadosDetailsById : ' SELECT *FROM Entidades INNER JOIN Empleados ON Entidades.id = Empleados.id INNER JOIN Cargos ON Empleados.id_cargo = Cargos.id INNER JOIN Roles ON Empleados.id_roles = Roles.id INNER JOIN Sucursales ON Empleados.id_sucursal = Sucursales.id WHERE Entidades.id = @id;',
+
+    deleteTicket: `DELETE FROM Tickets WHERE id = @id_ticket;`,
+
+    checkUserRoleByEmailAndPassword: `SELECT r.rol FROM Entidades eINNER JOIN Roles r ON e.id = r.idWHERE e.correo = @correo AND e.contrasenia = @contrasena;`,
+
+    //documentacion
+
+    createDocumentacion: `
+    INSERT INTO Documentacion (id_tipo_ticket, titulo, descripcion, fecha_ultima_modificacion)
+    VALUES (@id_tipo_ticket, @titulo, @descripcion, GETDATE());`,
+
+    getAllDocumentacion: `SELECT * FROM Documentacion;`,
+
+    getDocumentacionById: `SELECT * FROM Documentacion WHERE id = @id;`,
+
+    updateDocumentacion: `UPDATE Documentacion SET id_tipo_ticket = @id_tipo_ticket,titulo = @titulo,descripcion = @descripcion,fecha_ultima_modificacion = GETDATE()WHERE id = @id;`,
+
+    deleteDocumentacionById: `DELETE FROM Documentacion WHERE id = @id;`,
+
+    getDocumentacionByTipoTicket: `SELECT * FROM Documentacion WHERE id_tipo_ticket = @id_tipo_ticket;`,
+
+    //RECURSOS HUMANOS
+
+    createPuntuacionTicket: 'INSERT INTO PuntuacionesTickets (id_ticket, puntuacion, fecha_registro) VALUES (@id_ticket, @puntuacion, GETDATE())',
+    
+    getAgentesWithLowPuntuations: `
+        SELECT
+            A.id AS agente_id,
+            CONCAT(R.nombre, ' ', R.apellido) AS agente_nombre,
+            R.sueldo AS agente_sueldo,
+            COUNT(PT.id) AS cantidad_tickets_bajos
+        FROM
+            RecursosHumanos R
+        INNER JOIN
+            Agentes_helpdesk A ON R.id = A.id
+        LEFT JOIN
+            Tickets T ON A.id = T.id_agente
+        LEFT JOIN
+            PuntuacionesTickets PT ON T.id = PT.id_ticket AND PT.puntuacion <= 2
+        GROUP BY
+            A.id, R.nombre, R.apellido, R.sueldo
+        HAVING
+            COUNT(PT.id) > 0
+    `,
+
+
+    createReduccionSueldo: 'INSERT INTO ReduccionSueldo (id_agente, cantidad_tickets, porcentaje_reduccion, fecha_registro) VALUES (@id_agente, @cantidad_tickets, @porcentaje_reduccion, GETDATE())',
+
+    createRecursoHumano: 'INSERT INTO RecursosHumanos (nombre, apellido) VALUES (@nombre, @apellido)',
+    
+    updateRecursoHumano: 'UPDATE RecursosHumanos SET nombre = @nombre, apellido = @apellido WHERE id = @id',
+    
+    deleteRecursoHumano: 'DELETE FROM RecursosHumanos WHERE id = @id',
+    
+    getAllRecursosHumanos: 'SELECT * FROM RecursosHumanos',
+    
+    getRecursoHumanoById: 'SELECT * FROM RecursosHumanos WHERE id = @id',
+
     //traer todos los tickets de agentes
     getTicketsByAgentes: 'EXEC sp_GetTicketsByAgentes @id_agente',
 
@@ -98,4 +164,34 @@ export const queries =
         solucion = @solucion
     WHERE id = @id
     `,
+
+    escalateTicket: `
+    DECLARE @nivel_actual INT;
+    SELECT @nivel_actual = id_nivel_soporte FROM Tickets WHERE id = @id;
+
+    DECLARE @siguiente_nivel INT;
+    SET @siguiente_nivel = CASE
+        WHEN @nivel_actual < 5 THEN @nivel_actual + 1
+        ELSE @nivel_actual
+    END;
+
+    DECLARE @nuevo_agente INT;
+    SELECT TOP 1 @nuevo_agente = id
+    FROM Agentes_helpdesk
+    WHERE id_nivel_soporte = @siguiente_nivel
+        AND id_especialidad = @especialidad
+        AND NOT EXISTS (
+            SELECT 1
+            FROM Tickets t
+            WHERE t.id_agente_helpdesk_asignado = id
+                AND t.id_estado_ticket = 1
+        );
+
+    UPDATE Tickets
+    SET id_agente_helpdesk_asignado = @nuevo_agente,
+        id_nivel_soporte = @siguiente_nivel,
+        id_estado_ticket = 2
+    WHERE id = @id;
+    `
+
 };

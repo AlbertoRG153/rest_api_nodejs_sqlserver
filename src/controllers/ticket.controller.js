@@ -152,6 +152,33 @@ export const createTicket = async (req, res) => {
     }
 };
 
+export const deleteTicket = async (req, res) => {
+    const { correo, contrasena, id_ticket } = req.body;
+
+    try {
+        const pool = await getConnection();
+
+        // Verificar si el usuario tiene rol de tipo "Admin"
+        const isAdminResult = await pool.request()
+            .input('correo', sql.VarChar, correo)
+            .input('contrasena', sql.VarChar, contrasena)
+            .query(queries.checkAdminUser);
+
+        if (isAdminResult.recordset[0].isAdmin !== 1) {
+            return res.status(403).json({ msg: 'Acceso no autorizado. Usuario no tiene rol de tipo "Admin"' });
+        }
+
+        // Borrar el Ticket
+        await pool.request()
+            .input('id_ticket', sql.Int, id_ticket)
+            .query(queries.deleteTicket);
+
+        res.json({ msg: 'Ticket eliminado exitosamente' });
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+};
+
 export const getTicketInfoById = async (req, res) => {
     const { id } = req.params;
 
@@ -330,4 +357,5 @@ export const escalateTicket = async (req, res) => {
         res.status(500).send(error.message);
     }
 };
+
 

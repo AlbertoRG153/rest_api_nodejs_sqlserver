@@ -7,7 +7,7 @@ const router = Router();
 // Rutas para Entidades
 router.get('/entidades/Get', getEntidades);
 router.get('/entidades/Get/:id', getEntidadById);
-router.post('/entidades', createEntidad);
+router.post('/entidades/create', createEntidad);
 router.put('/entidades/put/:id', updateEntidadById);
 router.delete('/entidades/delete/:id', deleteEntidadById);
 

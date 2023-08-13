@@ -54,11 +54,11 @@ export const queries = {
     getEstadoTicketById: 'SELECT * FROM Estado_Ticket WHERE id = @Id',
     deleteEstadoTicketById: 'DELETE FROM Estado_Ticket WHERE id = @Id',
 
-     // Consultas para Entidades
-     createEntidad: 'INSERT INTO Entidades (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, correo, contrasenia) VALUES (@primer_nombre, @segundo_nombre, @primer_apellido, @segundo_apellido, @correo, @contrasenia)',
-     getAllEntidades: 'SELECT * FROM Entidades',
-     getEntidadById: 'SELECT * FROM Entidades WHERE id = @Id',
-     updateEntidadById: 'UPDATE Entidades SET primer_nombre = @primer_nombre, segundo_nombre = @segundo_nombre, primer_apellido = @primer_apellido, segundo_apellido = @segundo_apellido, correo = @correo, contrasenia = @contrasenia WHERE id = @id',
-     deleteEntidadById: 'DELETE FROM Entidades WHERE id = @Id',
+    // Consultas para Entidades
+    createEntidad: 'INSERT INTO Entidades (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, correo, contrasenia) VALUES (@primer_nombre, @segundo_nombre, @primer_apellido, @segundo_apellido, @correo, @contrasenia)',
+    getAllEntidades: 'SELECT * FROM Entidades',
+    getEntidadById: 'SELECT * FROM Entidades WHERE id = @Id',
+    updateEntidadById: 'UPDATE Entidades SET primer_nombre = @primer_nombre, segundo_nombre = @segundo_nombre, primer_apellido = @primer_apellido, segundo_apellido = @segundo_apellido, correo = @correo, contrasenia = @contrasenia WHERE id = @id',
+    deleteEntidadById: 'DELETE FROM Entidades WHERE id = @Id',
 
 };

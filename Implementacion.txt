@@ -1,0 +1,152 @@
+GET Tickets Asignados de Empleado, se manda PK del Empleado por URL
+[
+    {
+        "id_ticket" : 1,
+        "empleado_emisor" : {
+             "id_empleado" : 1,
+             "primer_nombre" : "Juan",
+             "segundo_nombre": "Carlos",
+             "primer_apellido" : "Villeda",
+             "segundo_apellido" : "Toro",
+             "correo" : "Juan@juan.com",
+        },
+        "agente_helpdesk_asignado" : {
+             "id_empleado" : 1,
+             "primer_nombre" : "Juan",
+             "segundo_nombre": "Carlos",
+             "primer_apellido" : "Villeda",
+             "segundo_apellido" : "Toro",
+             "correo" : "Juan@juan.com",
+        },
+        "fecha_emision" : 2023-20-03,
+        "fecha_asignacion" : 2023-20-03,
+        "descripcion" : "Si bro mira que se revento la maquina, esa vaina esta rotisima",
+        "tipo_ticket" : {
+             "nombre" : "Computadora no enciende",
+             "prioridad" : 20,
+             "tarifa_por_hora" : 500.2,
+             "nivel_soporte" :{                
+                 "nivel_soporte" : 3,
+                 "color" : "#21f121"
+             },
+             "especialidad" : {
+                "especialidad" : "Canon",
+                "color" : "#f23141",
+            }
+         },
+         "estado_bandera" : {
+            "estado_ticket" : "Asignado",
+            "color" : "#e35a00"
+        },
+        "solucion" : "Se conecto a corriente"
+    },
+    {
+        "id_ticket" : 1,
+        "empleado_emisor" : {
+             "id_empleado" : 1,
+             "primer_nombre" : "Juan",
+             "segundo_nombre": "Carlos",
+             "primer_apellido" : "Villeda",
+             "segundo_apellido" : "Toro",
+             "correo" : "Juan@juan.com",
+        },
+        "agente_helpdesk_asignado" : {
+             "id_empleado" : 1,
+             "primer_nombre" : "Juan",
+             "segundo_nombre": "Carlos",
+             "primer_apellido" : "Villeda",
+             "segundo_apellido" : "Toro",
+             "correo" : "Juan@juan.com",
+        },
+        "fecha_emision" : 2023-20-03,
+        "fecha_asignacion" : 2023-20-03,
+        "fecha_comienzo_trabajo": 2023-21-03,
+        "fecha_fin_trabajo" : 2023-22-03,
+        "puntuacion_satisfaccion" : 100,
+        "descripcion" : "Si bro mira que se revento la maquina, esa vaina esta rotisima",
+        "tipo_ticket" : {
+             "nombre" : "Computadora no enciende",
+             "prioridad" : 20,
+             "tarifa_por_hora" : 500.2,
+             "nivel_soporte" :{                
+                 "nivel_soporte" : 3,
+                 "color" : "#21f121"
+             },
+             "especialidad" : {
+                "especialidad" : "Canon",
+                "color" : "#f23141",
+            }
+         },
+         "estado_bandera" : {
+            "estado_ticket" : "Asignado",
+            "color" : "#e35a00"
+        },
+        "solucion" : "Se conecto a corriente"
+     }
+]
+
+GET Tickets En Curso del Empleado, se manda PK del empleado por URL
+GET Tickets En Curso del Agente, se manda PK del empleado por URL
+GET Tickets Finalizados del Empleado, se manda PK del empleado por URL
+GET Tickets Finalizados del Agente, se manda PK del empleado por URL
+
+GET Puntuacion promedio de tickets, se manda PK del empleado por URL
+
+El backend debe:
+    -retornar un AVG del la puntuaccion de satisfaccion sobre todos los tickets. 
+
+POST Ticket
+{
+    {
+        "empleado_emisor" : 1, //PK del empleado
+        "descripcion" : "Si bro mira que se revento la maquina, esa vaina esta rotisima",
+        "tipo_ticket" : 1, //PK del catalogo
+     }
+}
+El backend debe:
+    -Asignar un agente segun el tipo de ticket. Falle esto no se creara ticket y retornara un mensaje diciendo que no hay agente que pueda resolver este problema en este momento. 
+    Para implementarlo se revisan 2 cosas. Nivel soporte tiene que ser el mismo del ticket para el agente como el ticket Y el agente tiene que tener la misma especialidad. 
+    Cumpliendo estos 2 requisitos se crea ticket.
+    -Poner una fecha de emision del ticket cuando el POST es mandando
+    -Poner una puntuacion de 0 satisfaccion
+    -Estado de ticket como asignado. 
+    -Emision y asignacion tendran practicamente la misma fecha. 
+
+PUT Asignar estado "Comienzo Trabajo"
+se manda el Id del ticket por URL
+El Backend debe
+    -Poner la fecha de comienzo_trabajo. 
+    -Cambiar el estado_ticket
+
+
+PUT Asignar estado "Fin trabajo"
+se manda el Id del ticket por URL
+se manda un JSON que contiene
+{
+    "se_soluciono" : true, 
+    "solucion" : "se cambio la maquina",
+    "especialidad" : null
+}
+El backend debe:
+    -Verificar si se encontro solucionado, esto se checkea con se_soluciono, si es verdadero, el problema fue solucionado y se puede cambiar al estado del ticket a "Solucionado", se agrega solucion al ticket y se pone la fecha_fin trabajo. 
+    -Si es falso debe ejecutar la rutina de Escalar Ticket.
+    -Escalar Ticket{
+        -Debe Ingresarlo a la tabla de Tickets_escalados, marcar a un agente de nivel_soporte mas alto que el inicial y modificar el nivel_ticket de la misma manera (si el ticket empieza como nivel 1, se escala el agente a nivel 2 y el ticket a nivel 2), la nueva especialidad del ticket dictara el nuevo agente asignable. El agente_helpdesk_asignado sera cambiado al nuevo agente. 
+        El estado del  ticket ahora aparecera como "Asignado"
+        
+
+        Condicion de fallo: Falle la asignacion del ticket a un nuevo agente, se marcara el ticket como "Insolucionable" y se terminara la rutina. 
+    }
+
+
+DELETE Ticket
+Se manda del frontend
+{
+    "correo",
+    "contrasena",
+    "id_ticket" 
+}
+El backend debe:
+    -Verificar que el usuario que esta mandando esto tiene rol de tipo "Admin"
+    -Borrar el Ticket si es el caso
+    -Falle esto manda un error. 

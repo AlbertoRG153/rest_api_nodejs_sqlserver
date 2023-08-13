@@ -8,6 +8,27 @@ export const queries =
     getTotalClientes: 'SELECT COUNT(*) FROM Clientes',
     updateClienteById: 'UPDATE Clientes SET nombre=@nombre, telefono=@telefono, correo=@correo, contrasena=@contrasena WHERE Id = @Id',
 
+    ////////////////
+
+    getAllTickets: 'SELECT * FROM Tickets',
+    createTicketall: 'INSERT INTO Tickets (empleado_emisor, id_agente_helpdesk_asignado, fecha_emision, descripcion, id_tipo_ticket, id_estado_ticket) VALUES (@empleado_emisor, @id_agente_helpdesk_asignado, @fecha_emision, @descripcion, @id_tipo_ticket, @id_estado_ticket)',
+    getTicketById: 'SELECT * FROM Tickets WHERE id = @Id',
+    deleteTicketById: 'DELETE FROM Tickets WHERE id = @Id',
+    getTotalTickets: 'SELECT COUNT(*) FROM Tickets',
+    updateTicketById: 'UPDATE Tickets SET empleado_emisor=@empleado_emisor, id_agente_helpdesk_asignado=@id_agente_helpdesk_asignado, fecha_emision=@fecha_emision, descripcion=@descripcion, id_tipo_ticket=@id_tipo_ticket, id_estado_ticket=@id_estado_ticket WHERE id = @Id',
+    updateTicketDates: 'UPDATE Tickets SET fecha_comienzo_trabajo=@fecha_comienzo_trabajo, fecha_fin_trabajo=@fecha_fin_trabajo, id_estado_ticket=@id_estado_ticket WHERE id = @Id',
+    updateTicketSatisfaction: 'UPDATE Tickets SET puntuacion_satisfaccion=@puntuacion_satisfaccion, id_estado_ticket=@id_estado_ticket WHERE id = @Id',
+    // Otros queries que puedas tener...
+
+    // Procedimientos almacenados
+    sp_Post1Ticket: 'EXEC sp_Post1Ticket @empleado_emisor, @id_agente_helpdesk_asignado, @fecha_emision, @descripcion, @id_tipo_ticket, @id_estado_ticket',
+    sp_Post2Ticket: 'EXEC sp_Post2Ticket @id, @fecha_comienzo_trabajo, @fecha_fin_trabajo, @id_estado_ticket',
+    sp_Post3Ticket: 'EXEC sp_Post3Ticket @id, @puntuacion_satisfaccion, @id_estado_ticket',
+
+    ////////////////
+
+    getambos: 'SELECT Entidades.correo, Entidades.contrasenia, Roles.rol AS rol FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Roles ON Agentes_helpdesk.id_rol = Roles.id WHERE Entidades.correo = @correo AND Entidades.contrasenia = @contrasenia UNION SELECT Entidades.correo, Entidades.contrasenia, Roles.rol AS rol FROM Entidades INNER JOIN Empleados ON Entidades.id = Empleados.id INNER JOIN Roles ON Empleados.id_roles = Roles.id WHERE Entidades.correo = @correo AND Entidades.contrasenia = @contrasenia;',
+    ////////////////
 
     getAgentesWithEspecialidades: 'SELECT *FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Especialidades ON Agentes_helpdesk.id = Especialidades.id',
 
@@ -39,8 +60,11 @@ export const queries =
 
     //RECURSOS HUMANOS
 
-    createPuntuacionTicket: 'INSERT INTO PuntuacionesTickets (id_ticket, puntuacion, fecha_registro) VALUES (@id_ticket, @puntuacion, GETDATE())',
-    
+    createPuntuacionTicket: `
+        INSERT INTO PuntuacionesTickets (id_ticket, puntuacion, fecha_registro)
+        VALUES (@id_ticket, @puntuacion, GETDATE())
+    `,
+
     getAgentesWithLowPuntuations: `
         SELECT
             A.id AS agente_id,
@@ -61,18 +85,10 @@ export const queries =
             COUNT(PT.id) > 0
     `,
 
-
-    createReduccionSueldo: 'INSERT INTO ReduccionSueldo (id_agente, cantidad_tickets, porcentaje_reduccion, fecha_registro) VALUES (@id_agente, @cantidad_tickets, @porcentaje_reduccion, GETDATE())',
-
-    createRecursoHumano: 'INSERT INTO RecursosHumanos (nombre, apellido) VALUES (@nombre, @apellido)',
-    
-    updateRecursoHumano: 'UPDATE RecursosHumanos SET nombre = @nombre, apellido = @apellido WHERE id = @id',
-    
-    deleteRecursoHumano: 'DELETE FROM RecursosHumanos WHERE id = @id',
-    
-    getAllRecursosHumanos: 'SELECT * FROM RecursosHumanos',
-    
-    getRecursoHumanoById: 'SELECT * FROM RecursosHumanos WHERE id = @id',
+    createReduccionSueldo: `
+        INSERT INTO ReduccionSueldo (id_agente, cantidad_tickets, porcentaje_reduccion, fecha_registro)
+        VALUES (@id_agente, @cantidad_tickets, @porcentaje_reduccion, GETDATE())
+    `,
 
     //traer todos los tickets de agentes
     getTicketsByAgentes: 'EXEC sp_GetTicketsByAgentes @id_agente',

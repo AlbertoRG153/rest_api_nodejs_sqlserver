@@ -1,25 +1,64 @@
 import { Router } from 'express';
-import { getTicketsByAgente, getTicketsEnCursoEmpleado, getTicketsEnCursoAgente,getTicketsFinalizadosEmpleado,getTicketsFinalizadosAgente,getPuntuacionPromedioTickets,createTicket, asignarEstadoComienzoTrabajo, asignarEstadoFinTrabajo,getTicketInfoById,getAgenteByNivelEspecialidad,deleteTicket } from '../controllers/ticket.controller';
+import { authenticateAndAuthorize } from '../middlewares/authMiddleware';
+import {
+  getTickets,
+  post1Ticket,
+  post2Ticket,
+  post3Ticket,
+  getTicketById,
+  createTicketall,
+  updateTicketById,
+  updateTicketSatisfaction,
+  updateTicketDates,
+  deleteTicketById,
+  getTicketsByAgente,
+  getTicketsEnCursoEmpleado,
+  getTicketsEnCursoAgente,
+  getTicketsFinalizadosEmpleado,
+  getTicketsFinalizadosAgente,
+  getPuntuacionPromedioTickets,
+  createTicket2,
+  asignarEstadoComienzoTrabajo,
+  asignarEstadoFinTrabajo,
+  getTicketInfoById,
+  getAgenteByNivelEspecialidad,
+  deleteTicket
+} from '../controllers/ticket.controller';
 
 const router = Router();
 
-router.get('/tickets/agente/:id_agente', getTicketsByAgente);
-router.get('/tickets/en-curso/empleado/:id_empleado', getTicketsEnCursoEmpleado);
-router.get('/tickets/en-curso/agente/:id_agente', getTicketsEnCursoAgente);
-router.get('/tickets/finalizados/empleado/:id_empleado', getTicketsFinalizadosEmpleado);
-router.get('/tickets/finalizados/agente/:id_agente', getTicketsFinalizadosAgente);
-router.get('/tickets/puntuacion-promedio/:id_empleado', getPuntuacionPromedioTickets);
+// Define los roles permitidos para cada tipo de operación
+const rolesGet = ['Admin', 'Agente', 'Recursos Humanos'];
+const rolesPost = ['Admin', 'Agente'];
+const rolesPut = ['Admin', 'Agente'];
+const rolesDelete = ['Admin'];
 
+// Aplica el middleware de autenticación y autorización a las rutas
+router.get('/tickets/get/all', authenticateAndAuthorize(rolesGet), getTickets);
+router.get('/tickets/get/:id', authenticateAndAuthorize(rolesGet), getTicketById);
+router.post('/tickets/post/all', authenticateAndAuthorize(rolesPost), createTicketall);
+router.put('/tickets/put/:id', authenticateAndAuthorize(rolesPut), updateTicketById);
+router.put('/tickets/:id/dates', authenticateAndAuthorize(rolesPut), updateTicketDates);
+router.put('/tickets/:id/satisfaction', authenticateAndAuthorize(rolesPut), updateTicketSatisfaction);
+router.delete('/tickets/:id', authenticateAndAuthorize(rolesDelete), deleteTicketById);
 
-router.get('/tickets/info/:id', getTicketInfoById);
-router.get('/tickets/agente/:nivel_soporte/:id_especialidad', getAgenteByNivelEspecialidad);
-router.put('/tickets/asignar-comienzo-trabajo/:id', asignarEstadoComienzoTrabajo);
-router.put('/tickets/asignar-fin-trabajo/:id', asignarEstadoFinTrabajo);
-router.post('/tickets/create', createTicket);
-router.delete('/delete-ticket', deleteTicket);
+// Rutas para procedimientos almacenados
+router.post('/tickets/post1', authenticateAndAuthorize(rolesPost), post1Ticket);
+router.post('/tickets/post2', authenticateAndAuthorize(rolesPost), post2Ticket);
+router.post('/tickets/post3', authenticateAndAuthorize(rolesPost), post3Ticket);
 
+router.get('/tickets/agente/:id_agente', authenticateAndAuthorize(rolesGet), getTicketsByAgente);
+router.get('/tickets/en-curso/empleado/:id_empleado', authenticateAndAuthorize(rolesGet), getTicketsEnCursoEmpleado);
+router.get('/tickets/en-curso/agente/:id_agente', authenticateAndAuthorize(rolesGet), getTicketsEnCursoAgente);
+router.get('/tickets/finalizados/empleado/:id_empleado', authenticateAndAuthorize(rolesGet), getTicketsFinalizadosEmpleado);
+router.get('/tickets/finalizados/agente/:id_agente', authenticateAndAuthorize(rolesGet), getTicketsFinalizadosAgente);
+router.get('/tickets/puntuacion-promedio/:id_empleado', authenticateAndAuthorize(rolesGet), getPuntuacionPromedioTickets);
 
-
-
+router.get('/tickets/info/:id', authenticateAndAuthorize(rolesGet), getTicketInfoById);
+router.get('/tickets/agente/:nivel_soporte/:id_especialidad', authenticateAndAuthorize(rolesGet), getAgenteByNivelEspecialidad);
+router.put('/tickets/asignar-comienzo-trabajo/:id', authenticateAndAuthorize(rolesPut), asignarEstadoComienzoTrabajo);
+router.put('/tickets/asignar-fin-trabajo/:id', authenticateAndAuthorize(rolesPut), asignarEstadoFinTrabajo);
+router.post('/tickets/create', authenticateAndAuthorize(rolesPost), createTicket2);
+router.delete('/delete-ticket', authenticateAndAuthorize(rolesDelete), deleteTicket);
 
 export default router;

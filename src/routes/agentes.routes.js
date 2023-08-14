@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { getAgentesById, saveAgente, updateAgenteById, deleteAgenteById } from '../controllers/agentes.controller'
+import { getAgentesById, saveAgente, updateAgenteById, deleteAgenteById, getAgentesByLogin } from '../controllers/agentes.controller'
 
 const router = Router()
 
 router.get('/agentes/get',)
 
 router.get('/agentes/get/:id', getAgentesById)
+
+router.get('/agentes/get-by-login', getAgentesByLogin)
 
 router.post('/agentes/save', saveAgente)
 

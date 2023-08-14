@@ -52,6 +52,28 @@ export const getAgentesById = async (req, res) => {
     res.json(result.recordset[0])
 };
 
+export const getAgentesByLogin = async (req, res) => {
+    try {
+        const { correo, contrasenia } = req.body
+
+        if (correo == null || contrasenia == null) {
+            return res.status(400).json({ msg: 'Bad Request.  Por favor llena todos los campos' })
+        }
+
+        const pool = await getConnection();
+
+        const result = await pool.request()
+            .input('correo', sql.VarChar, correo)
+            .input('contrasenia', sql.VarChar, contrasenia)
+            .query(queries.getAgenteByLogin);
+
+        res.json(result.recordset[0]);
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
 export const deleteAgenteById = async (req, res) => {
     const { id } = req.params
 

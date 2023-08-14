@@ -250,6 +250,9 @@ export const queries =
     //Eliminar un Agente por su Id
     deleteAgenteById: 'BEGIN TRANSACTION; DELETE FROM Agentes_helpdesk WHERE id = @Id; DELETE FROM Entidades WHERE id=@Id; COMMIT TRANSACTION;',
 
+    //Obtener un solo Agentes por su por su correo y contrasenia
+    getAgenteByLogin: 'SELECT ah.id, e.primer_nombre, e.segundo_nombre, e.primer_apellido, e.segundo_apellido, e.correo, esp.especialidad, esp.color as colorEspecialidad, ns.nivel_soporte, ns.color as colorSoporte, r.rol FROM Agentes_helpdesk ah INNER JOIN Entidades e ON ah.id = e.id INNER JOIN Especialidades esp ON ah.id_especialidad = esp.id INNER JOIN Niveles_soporte ns ON ah.id_nivel_soporte =  ns.nivel_soporte INNER JOIN Roles r ON ah.id_rol = r.id WHERE e.correo=@correo AND e.contrasenia=@contrasenia;',
+
     //Queries Empleados
 
     //Obtener la informacion de todos los Empleados

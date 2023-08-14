@@ -5,7 +5,7 @@ import { createPuntuacionTicket, getAgentesWithLowPuntuations, createReduccionSu
 const router = Router();
 
 // Define los roles permitidos para cada tipo de operación
-const rolesPost = ['Admin'];
+const rolesPost = ['Admin', 'Agente' ];
 const rolesGet = ['Admin', 'Recursos Humanos'];
 
 

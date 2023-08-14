@@ -40,7 +40,7 @@ router.post('/tickets/post/all', authenticateAndAuthorize(rolesPost), createTick
 router.put('/tickets/put/:id', authenticateAndAuthorize(rolesPut), updateTicketById);
 router.put('/tickets/:id/dates', authenticateAndAuthorize(rolesPut), updateTicketDates);
 router.put('/tickets/:id/satisfaction', authenticateAndAuthorize(rolesPut), updateTicketSatisfaction);
-router.delete('/tickets/:id', authenticateAndAuthorize(rolesDelete), deleteTicketById);
+router.delete('/tickets/delete/:id', authenticateAndAuthorize(rolesDelete), deleteTicketById);
 
 // Rutas para procedimientos almacenados
 router.post('/tickets/post1', authenticateAndAuthorize(rolesPost), post1Ticket);
@@ -55,7 +55,7 @@ router.get('/tickets/finalizados/agente/:id_agente', authenticateAndAuthorize(ro
 router.get('/tickets/puntuacion-promedio/:id_empleado', authenticateAndAuthorize(rolesGet), getPuntuacionPromedioTickets);
 
 router.get('/tickets/info/:id', authenticateAndAuthorize(rolesGet), getTicketInfoById);
-router.get('/tickets/agente/:nivel_soporte/:id_especialidad', authenticateAndAuthorize(rolesGet), getAgenteByNivelEspecialidad);
+router.get('/tickets/agente/nivel_soporte/:id_especialidad', authenticateAndAuthorize(rolesGet), getAgenteByNivelEspecialidad);
 router.put('/tickets/asignar-comienzo-trabajo/:id', authenticateAndAuthorize(rolesPut), asignarEstadoComienzoTrabajo);
 router.put('/tickets/asignar-fin-trabajo/:id', authenticateAndAuthorize(rolesPut), asignarEstadoFinTrabajo);
 router.post('/tickets/create', authenticateAndAuthorize(rolesPost), createTicket2);

@@ -64,6 +64,27 @@ export const deleteAgenteById = async (req, res) => {
     res.send(result)
 };
 
+
+export const getLogin = async (req, res) => {
+    try {
+        const { correo, contrasenia } = req.body
+
+        if (correo == null, contrasenia == null) {
+            return res.status(400).json({ msg: 'Bad Request.  Por favor llena todos los campos' })
+        }
+
+        const result = await pool.request()
+            .input('correo', sql.VarChar, correo)
+            .input('correo', sql.VarChar, contrasenia)
+            .query(queries.getLoginAgente)
+
+        res.send(result)
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+};
+
 export const updateAgenteById = async (req, res) => {
     try {
         const { primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, correo, contrasenia,
@@ -103,3 +124,5 @@ export const updateAgenteById = async (req, res) => {
         res.send(error.message);
     }
 };
+
+

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAgentesById, saveAgente, updateAgenteById, deleteAgenteById } from '../controllers/agentes.controller'
+import { getAgentesById, saveAgente, updateAgenteById, deleteAgenteById, getLogin } from '../controllers/agentes.controller'
 
 const router = Router()
 
@@ -12,5 +12,7 @@ router.post('/agentes/save', saveAgente)
 router.put('/agentes/update/:id', updateAgenteById)
 
 router.delete('/agentes/delete/:id', deleteAgenteById)
+
+router.get('agentes/get/login', getLogin)
 
 export default router

@@ -12,10 +12,10 @@ import {
 const router = Router();
 
 // Define los roles permitidos para cada tipo de operación
-const rolesGet = ['Admin', 'Agente', 'Recursos Humanos'];
-const rolesPost = ['Admin', 'Agente' ];
-const rolesPut = ['Admin', 'Agente'];
-const rolesDelete = ['Admin'];
+const rolesGet = ['Administrador', 'Agente', 'Recursos Humanos'];
+const rolesPost = ['Administrador', 'Agente' ];
+const rolesPut = ['Administrador', 'Agente'];
+const rolesDelete = ['Administrador'];
 
 // Aplica el middleware de autenticación y autorización a las rutas
 router.post('/documentacion/post', authenticateAndAuthorize(rolesPost), createDocumentacion);

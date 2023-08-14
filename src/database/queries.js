@@ -30,6 +30,8 @@ export const queries =
     getambos: 'SELECT Entidades.correo, Entidades.contrasenia, Roles.rol AS rol FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Roles ON Agentes_helpdesk.id_rol = Roles.id WHERE Entidades.correo = @correo AND Entidades.contrasenia = @contrasenia UNION SELECT Entidades.correo, Entidades.contrasenia, Roles.rol AS rol FROM Entidades INNER JOIN Empleados ON Entidades.id = Empleados.id INNER JOIN Roles ON Empleados.id_roles = Roles.id WHERE Entidades.correo = @correo AND Entidades.contrasenia = @contrasenia;',
     ////////////////
 
+    getelvis: 'SELECT Tickets.id, Tickets.fecha_emision, Tickets.fecha_asignacion, Tickets.fecha_comienzo_trabajo, Tickets.fecha_fin_trabajo, Tickets.descripcion, Tickets.puntuacion_satisfaccion, Emisor.id AS id_empleado, Emisor.primer_nombre AS empleado_primer_nombre, Emisor.primer_apellido AS empleado_primer_apellido, Agente.id AS id_agente, Agente.primer_nombre AS agente_primer_nombre, Agente.primer_apellido AS agente_primer_apellido, Tipo_tickets.nombre, Tipo_tickets.proridad, Tipo_tickets.tarifa_por_hora, Niveles_soporte.nivel_soporte, Niveles_soporte.color AS nivel_soporte_color, Especialidades.especialidad, Especialidades.color AS especialidad_color, Estado_Ticket.estado_ticket, Estado_Ticket.color AS estado_ticket_color FROM Tickets INNER JOIN Entidades AS Emisor ON Tickets.empleado_emisor = Emisor.id INNER JOIN Entidades AS Agente ON Tickets.id_agente_helpdesk_asignado = Agente.id INNER JOIN Tipo_tickets ON Tickets.id_tipo_ticket = Tipo_tickets.id INNER JOIN Niveles_soporte ON Tipo_tickets.id_nivel_soporte = Niveles_soporte.id INNER JOIN Especialidades ON Tipo_tickets.id_especialidad = Especialidades.id INNER JOIN Estado_Ticket ON Tickets.id_estado_ticket = Estado_Ticket.id;',
+
     getAgentesWithEspecialidades: 'SELECT *FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Especialidades ON Agentes_helpdesk.id = Especialidades.id',
 
     getEmpleadosDetails: 'SELECT *FROM Entidades INNER JOIN Empleados ON Entidades.id = Empleados.id INNER JOIN Cargos ON  Empleados.id = Cargos.id INNER JOIN Roles on Empleados.id = Roles.id INNER JOIN Sucursales on Empleados.id = Sucursales.id',
@@ -271,6 +273,15 @@ export const queries =
     deleteEmpleadoById: 'BEGIN TRANSACTION; DELETE FROM Empleados WHERE id=@Id; DELETE FROM Entidades WHERE id=@Id; COMMIT TRANSACTION;',
 
     //Obtener un solo Empleado por su por su correo y contrasenia
-    getEmpleadoByLogin: 'SELECT em.id, e.primer_nombre, e.segundo_nombre, e.primer_apellido, e.segundo_apellido, e.correo, e.contrasenia, s.codigo, s.nombre as sucursalNombre, c.nombre as cargoNombre, c.color, r.rol  FROM Empleados em INNER JOIN Entidades e ON em.id = e.id INNER JOIN Cargos c ON em.id_cargo = c.id INNER JOIN Sucursales s ON em.id_sucursal = s.id INNER JOIN Roles r ON em.id_roles = r.id WHERE e.correo=@correo AND e.contrasenia=@contrasenia;'
+    getEmpleadoByLogin: 'SELECT em.id, e.primer_nombre, e.segundo_nombre, e.primer_apellido, e.segundo_apellido, e.correo, e.contrasenia, s.codigo, s.nombre as sucursalNombre, c.nombre as cargoNombre, c.color, r.rol  FROM Empleados em INNER JOIN Entidades e ON em.id = e.id INNER JOIN Cargos c ON em.id_cargo = c.id INNER JOIN Sucursales s ON em.id_sucursal = s.id INNER JOIN Roles r ON em.id_roles = r.id WHERE e.correo=@correo AND e.contrasenia=@contrasenia;',
+
+    // Factura queries
+  createFactura: `INSERT INTO Factura (id_ticket, id_empresa, subtotal_pagar, id_isv, total_pagar, numero_factura) VALUES (@id_ticket, @id_empresa, @subtotal_pagar, @id_isv, @total_pagar, @numero_factura);`,
+
+  getFacturaById: `SELECT * FROM Factura WHERE id = @id;`,
+
+  getFacturasByEmpresa: `SELECT * FROM Factura WHERE id_empresa = @id_empresa;`,
+
+  deleteFacturaById: `DELETE FROM Factura WHERE id = @id;`,
 
 };

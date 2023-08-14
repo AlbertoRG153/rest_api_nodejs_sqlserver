@@ -22,16 +22,17 @@ import {
   asignarEstadoFinTrabajo,
   getTicketInfoById,
   getAgenteByNivelEspecialidad,
-  deleteTicket
+  deleteTicket,
+  getTicketDetails
 } from '../controllers/ticket.controller';
 
 const router = Router();
 
 // Define los roles permitidos para cada tipo de operación
-const rolesGet = ['Admin', 'Agente', 'Recursos Humanos'];
-const rolesPost = ['Admin', 'Agente'];
-const rolesPut = ['Admin', 'Agente'];
-const rolesDelete = ['Admin'];
+const rolesGet = ['Administrador', 'Agente', 'Recursos Humanos'];
+const rolesPost = ['Administrador', 'Agente'];
+const rolesPut = ['Administrador', 'Agente'];
+const rolesDelete = ['Administrador'];
 
 // Aplica el middleware de autenticación y autorización a las rutas
 router.get('/tickets/get/all', authenticateAndAuthorize(rolesGet), getTickets);
@@ -41,6 +42,7 @@ router.put('/tickets/put/:id', authenticateAndAuthorize(rolesPut), updateTicketB
 router.put('/tickets/:id/dates', authenticateAndAuthorize(rolesPut), updateTicketDates);
 router.put('/tickets/:id/satisfaction', authenticateAndAuthorize(rolesPut), updateTicketSatisfaction);
 router.delete('/tickets/delete/:id', authenticateAndAuthorize(rolesDelete), deleteTicketById);
+router.get('/tickets/get/all2', authenticateAndAuthorize(rolesGet), getTicketDetails);
 
 // Rutas para procedimientos almacenados
 router.post('/tickets/post1', authenticateAndAuthorize(rolesPost), post1Ticket);

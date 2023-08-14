@@ -8,6 +8,7 @@ import REHUM from './routes/recursosHumanos.routes'
 import empresasRoutes from './routes/empresas.routes'
 import agentesRoutes from './routes/agentes.routes'
 import empleadosRoutes from './routes/empleados.routes'
+import Facturas from './routes/facturas.routes'
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.set('port', config.port);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(empresasRoutes, agentesRoutes, empleadosRoutes, clientesRoutes, Ticketroutes, VistasGen, Documentacion, REHUM);
+app.use(empresasRoutes, agentesRoutes, empleadosRoutes, clientesRoutes, Ticketroutes, VistasGen, Documentacion, REHUM,Facturas);
 
 
 export default app

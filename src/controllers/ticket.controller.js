@@ -40,6 +40,24 @@ export const updateTicketDates = async (req, res) => {
     }
 };
 
+
+export const getTicketDetails = async (req, res) => {
+    try {
+      const pool = await getConnection();
+  
+      const result = await pool.request()
+        .query(queries.getelvis);
+  
+      const ticketDetails = result.recordset;
+  
+      res.status(200).json(ticketDetails);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  };
+
+
 export const updateTicketSatisfaction = async (req, res) => {
     try {
         const { id } = req.params;

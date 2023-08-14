@@ -1,11 +1,5 @@
 export const queries =
 {
-    getAllClientes: 'SELECT * FROM Clientes',
-    saveCliente: 'INSERT INTO Clientes (nombre, telefono, correo, contrasena) VALUES (@nombre, @telefono, @correo, @contrasena)',
-    getClienteById: 'SELECT * FROM Clientes WHERE Id = @Id',
-    deleteClienteById: 'DELETE FROM Clientes WHERE Id = @Id',
-    getTotalClientes: 'SELECT COUNT(*) FROM Clientes',
-    updateClienteById: 'UPDATE Clientes SET nombre=@nombre, telefono=@telefono, correo=@correo, contrasena=@contrasena WHERE Id = @Id',
 
     //Queries de Empresa
     getAllEmpresas: 'SELECT * FROM Empresas e INNER JOIN Nivel_acuerdo_servicio nas ON e.id_nivel_acuerdo_servicio = nas.id INNER JOIN Niveles_soporte ns ON nas.id_nivel_soporte = ns.id',

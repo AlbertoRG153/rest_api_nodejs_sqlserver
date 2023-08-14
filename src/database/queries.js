@@ -10,7 +10,38 @@ export const queries =
 
     ////////////////
 
-    getAllTickets: 'SELECT * FROM Tickets',
+    getAllTickets: `
+        SELECT 
+        Tickets.id,
+        Tickets.fecha_emision,
+        Tickets.fecha_asignacion,
+        Tickets.fecha_comienzo_trabajo,
+        Tickets.fecha_fin_trabajo,
+        Tickets.descripcion,
+        Tickets.puntuacion_satisfaccion,
+        Emisor.id AS id_empleado,
+        Emisor.primer_nombre AS empleado_primer_nombre,
+        Emisor.primer_apellido AS empleado_primer_apellido,
+        Agente.id AS id_agente,
+        Agente.primer_nombre AS agente_primer_nombre,
+        Agente.primer_apellido AS agente_primer_apellido,
+        Tipo_tickets.nombre,
+        Tipo_tickets.proridad,
+        Tipo_tickets.tarifa_por_hora,
+        Niveles_soporte.nivel_soporte,
+        Niveles_soporte.color AS nivel_soporte_color,
+        Especialidades.especialidad,
+        Especialidades.color AS especialidad_color,
+        Estado_Ticket.estado_ticket,
+        Estado_Ticket.color AS estado_ticket_color
+    FROM Tickets
+    INNER JOIN Entidades AS Emisor ON Tickets.empleado_emisor = Emisor.id
+    INNER JOIN Entidades AS Agente ON Tickets.id_agente_helpdesk_asignado = Agente.id
+    INNER JOIN Tipo_tickets ON Tickets.id_tipo_ticket = Tipo_tickets.id
+    INNER JOIN Niveles_soporte ON Tipo_tickets.id_nivel_soporte = Niveles_soporte.id
+    INNER JOIN Especialidades ON Tipo_tickets.id_especialidad = Especialidades.id
+    INNER JOIN Estado_Ticket ON Tickets.id_estado_ticket = Estado_Ticket.id;
+    `,
     createTicketall: 'INSERT INTO Tickets (empleado_emisor, id_agente_helpdesk_asignado, fecha_emision, descripcion, id_tipo_ticket, id_estado_ticket) VALUES (@empleado_emisor, @id_agente_helpdesk_asignado, @fecha_emision, @descripcion, @id_tipo_ticket, @id_estado_ticket)',
     getTicketById: 'SELECT * FROM Tickets WHERE id = @Id',
     deleteTicketById: 'DELETE FROM Tickets WHERE id = @Id',

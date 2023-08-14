@@ -1,5 +1,3 @@
-import { saveEmpresa } from "../controllers/empresas.controller";
-
 export const queries =
 {
     getAllClientes: 'SELECT * FROM Clientes',

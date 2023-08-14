@@ -15,4 +15,6 @@ router.put('/agentes/update/:id', updateAgenteById)
 
 router.delete('/agentes/delete/:id', deleteAgenteById)
 
+router.get('agentes/get/login', getLogin)
+
 export default router

@@ -10,7 +10,38 @@ export const queries =
 
     ////////////////
 
-    getAllTickets: 'SELECT * FROM Tickets',
+    getAllTickets: `
+        SELECT 
+        Tickets.id,
+        Tickets.fecha_emision,
+        Tickets.fecha_asignacion,
+        Tickets.fecha_comienzo_trabajo,
+        Tickets.fecha_fin_trabajo,
+        Tickets.descripcion,
+        Tickets.puntuacion_satisfaccion,
+        Emisor.id AS id_empleado,
+        Emisor.primer_nombre AS empleado_primer_nombre,
+        Emisor.primer_apellido AS empleado_primer_apellido,
+        Agente.id AS id_agente,
+        Agente.primer_nombre AS agente_primer_nombre,
+        Agente.primer_apellido AS agente_primer_apellido,
+        Tipo_tickets.nombre,
+        Tipo_tickets.proridad,
+        Tipo_tickets.tarifa_por_hora,
+        Niveles_soporte.nivel_soporte,
+        Niveles_soporte.color AS nivel_soporte_color,
+        Especialidades.especialidad,
+        Especialidades.color AS especialidad_color,
+        Estado_Ticket.estado_ticket,
+        Estado_Ticket.color AS estado_ticket_color
+    FROM Tickets
+    INNER JOIN Entidades AS Emisor ON Tickets.empleado_emisor = Emisor.id
+    INNER JOIN Entidades AS Agente ON Tickets.id_agente_helpdesk_asignado = Agente.id
+    INNER JOIN Tipo_tickets ON Tickets.id_tipo_ticket = Tipo_tickets.id
+    INNER JOIN Niveles_soporte ON Tipo_tickets.id_nivel_soporte = Niveles_soporte.id
+    INNER JOIN Especialidades ON Tipo_tickets.id_especialidad = Especialidades.id
+    INNER JOIN Estado_Ticket ON Tickets.id_estado_ticket = Estado_Ticket.id;
+    `,
     createTicketall: 'INSERT INTO Tickets (empleado_emisor, id_agente_helpdesk_asignado, fecha_emision, descripcion, id_tipo_ticket, id_estado_ticket) VALUES (@empleado_emisor, @id_agente_helpdesk_asignado, @fecha_emision, @descripcion, @id_tipo_ticket, @id_estado_ticket)',
     getTicketById: 'SELECT * FROM Tickets WHERE id = @Id',
     deleteTicketById: 'DELETE FROM Tickets WHERE id = @Id',
@@ -251,6 +282,7 @@ export const queries =
 
     //Eliminar un Agente por su Id
     deleteAgenteById: 'BEGIN TRANSACTION; DELETE FROM Agentes_helpdesk WHERE id = @Id; DELETE FROM Entidades WHERE id=@Id; COMMIT TRANSACTION;',
+    getLoginAgente: "SELECT Entidades.primer_nombre, Entidades.segundo_nombre,Entidades.primer_apellido,Entidades.segundo_apellido, Entidades .correo, Especialidades.especialidad, Especialidades.color, Niveles_soporte.nivel_soporte, Niveles_soporte.color FROM Entidades INNER JOIN Agentes_helpdesk ON Entidades.id = Agentes_helpdesk.id INNER JOIN Especialidades ON Agentes_helpdesk.id_especialidad = Especialidades.id INNER JOIN Niveles_soporte ON Agentes_helpdesk.id_nivel_soporte = Niveles_soporte.id WHERE Entidades.correo = '@correo;' AND Entidades.contrasenia = '@contrasenia;';",
 
     //Obtener un solo Agentes por su por su correo y contrasenia
     getAgenteByLogin: 'SELECT ah.id, e.primer_nombre, e.segundo_nombre, e.primer_apellido, e.segundo_apellido, e.correo, esp.especialidad, esp.color as colorEspecialidad, ns.nivel_soporte, ns.color as colorSoporte, r.rol FROM Agentes_helpdesk ah INNER JOIN Entidades e ON ah.id = e.id INNER JOIN Especialidades esp ON ah.id_especialidad = esp.id INNER JOIN Niveles_soporte ns ON ah.id_nivel_soporte =  ns.nivel_soporte INNER JOIN Roles r ON ah.id_rol = r.id WHERE e.correo=@correo AND e.contrasenia=@contrasenia;',
